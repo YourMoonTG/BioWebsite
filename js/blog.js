@@ -23,6 +23,9 @@ class BlogManager {
             return;
         }
 
+        // Очищаем устаревший кэш при инициализации
+        this.invalidateOldCache();
+
         // Загружаем статьи
         await this.loadArticles();
         
@@ -40,40 +43,48 @@ class BlogManager {
     async loadArticles() {
         console.log('[blog] loading articles...');
         
-        // Проверяем кэш
-        const cached = this.getCachedArticles();
-        if (cached) {
-            console.log('[blog] using cached articles');
-            this.articles = cached;
-            this.filteredArticles = [...this.articles];
-            return;
-        }
-
+        // Всегда загружаем свежие данные с сервера, но используем кэш как fallback
         try {
-            const response = await fetch('blog/articles.json');
+            const response = await fetch('blog/articles.json?t=' + Date.now()); // Добавляем timestamp для обхода кэша браузера
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
             const data = await response.json();
-            this.articles = data.articles || [];
+            let articles = data.articles || [];
             
             // Фильтруем только опубликованные статьи
-            this.articles = this.articles.filter(article => article.status === 'published');
+            articles = articles.filter(article => article.status === 'published');
             
             // Сортируем по дате
+            this.articles = articles;
             this.sortArticles();
             
-            // Сохраняем в кэш
-            this.cacheArticles(this.articles);
+            // Проверяем, изменились ли данные, сравнивая хеш
+            const newHash = this.hashArticles(this.articles);
+            const cachedHash = this.getCachedHash();
+            
+            // Сохраняем в кэш только если данные изменились
+            if (newHash !== cachedHash) {
+                console.log('[blog] articles data changed, updating cache');
+                this.cacheArticles(this.articles);
+            }
             
             this.filteredArticles = [...this.articles];
             
             console.log(`[blog] loaded ${this.articles.length} articles`);
         } catch (error) {
             console.error('[blog] error loading articles:', error);
-            this.articles = [];
-            this.filteredArticles = [];
+            // В случае ошибки используем кэш как fallback
+            const cached = this.getCachedArticles();
+            if (cached) {
+                console.log('[blog] using cached articles as fallback');
+                this.articles = cached;
+                this.filteredArticles = [...this.articles];
+            } else {
+                this.articles = [];
+                this.filteredArticles = [];
+            }
         }
     }
 
@@ -270,9 +281,12 @@ class BlogManager {
 
     // Кэширование
     cacheArticles(articles) {
+        // Вычисляем хеш статей для валидации кэша
+        const articlesHash = this.hashArticles(articles);
         const cacheData = {
             articles: articles,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            hash: articlesHash
         };
         try {
             localStorage.setItem(this.cacheKey, JSON.stringify(cacheData));
@@ -301,10 +315,46 @@ class BlogManager {
         }
     }
 
+    getCachedHash() {
+        try {
+            const cached = localStorage.getItem(this.cacheKey);
+            if (!cached) return null;
+            const cacheData = JSON.parse(cached);
+            return cacheData.hash || null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // Создание простого хеша статей для валидации кэша
+    hashArticles(articles) {
+        // Простой хеш на основе количества статей и их ID
+        const ids = articles.map(a => a.id).sort().join(',');
+        return ids.length + '-' + ids.substring(0, 50);
+    }
+
     // Очистка кэша
     clearCache() {
         localStorage.removeItem(this.cacheKey);
         console.log('[blog] cache cleared');
+    }
+
+    // Инвалидация устаревшего кэша (без хеша)
+    invalidateOldCache() {
+        try {
+            const cached = localStorage.getItem(this.cacheKey);
+            if (!cached) return;
+            
+            const cacheData = JSON.parse(cached);
+            // Если в кэше нет хеша, значит это старый формат - очищаем
+            if (!cacheData.hash) {
+                console.log('[blog] invalidating old cache format');
+                localStorage.removeItem(this.cacheKey);
+            }
+        } catch (e) {
+            // При ошибке просто очищаем кэш
+            localStorage.removeItem(this.cacheKey);
+        }
     }
 }
 

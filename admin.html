@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор статей - Moon</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- TipTap редактор -->
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/core@2.1.13/dist/index.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/starter-kit@2.1.13/dist/index.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-image@2.1.13/dist/index.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tiptap/extension-link@2.1.13/dist/index.umd.min.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Шапка -->
+        <div class="admin-header">
+            <div class="container">
+                <div class="admin-header-content">
+                    <div>
+                        <h1 class="admin-title">📝 Редактор статей</h1>
+                    </div>
+                    <div class="admin-actions">
+                        <div class="token-settings">
+                            <input 
+                                type="password" 
+                                id="github-token" 
+                                class="token-input" 
+                                placeholder="GitHub Personal Access Token"
+                            >
+                            <button class="btn btn-secondary" id="save-token-btn">Сохранить</button>
+                        </div>
+                        <div class="token-status" id="token-status">
+                            <span>Токен не установлен</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="admin-content">
+            <!-- Сайдбар со списком статей -->
+            <aside class="articles-sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">Статьи</h2>
+                    <button class="btn btn-primary" id="new-article-btn">+ Новая</button>
+                </div>
+                <div class="articles-list" id="articles-list">
+                    <div style="text-align: center; color: var(--text-secondary); padding: 2rem;">
+                        Загрузка статей...
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Редактор -->
+            <main class="editor-panel" id="editor-panel" style="display: none;">
+                <!-- Заголовок статьи -->
+                <input 
+                    type="text" 
+                    id="article-title" 
+                    class="editor-title-input" 
+                    placeholder="Заголовок статьи..."
+                >
+
+                <!-- Метаданные -->
+                <div class="editor-meta">
+                    <div class="meta-field">
+                        <label class="meta-label">Дата публикации</label>
+                        <input type="date" id="article-date" class="meta-input">
+                    </div>
+                    <div class="meta-field">
+                        <label class="meta-label">Теги (через запятую)</label>
+                        <input type="text" id="article-tags" class="meta-input" placeholder="tag1, tag2, tag3">
+                    </div>
+                    <div class="meta-field">
+                        <label class="meta-label">Краткое описание</label>
+                        <input type="text" id="article-excerpt" class="meta-input" placeholder="Краткое описание статьи">
+                    </div>
+                    <div class="meta-field">
+                        <label class="meta-label">Время чтения (мин)</label>
+                        <input type="number" id="article-read-time" class="meta-input" value="5" min="1">
+                    </div>
+                    <div class="meta-field">
+                        <label class="meta-label">Статус</label>
+                        <select id="article-status" class="meta-input">
+                            <option value="draft">Черновик</option>
+                            <option value="published">Опубликовано</option>
+                        </select>
+                    </div>
+                    <div class="meta-field">
+                        <label class="meta-label">Иконка</label>
+                        <input type="text" id="article-icon" class="meta-input" placeholder="icon-brain.svg" value="icon-brain.svg">
+                    </div>
+                </div>
+
+                <!-- Редактор контента -->
+                <div class="editor-content">
+                    <div class="editor-tabs">
+                        <button class="editor-tab active" data-tab="editor">Редактор</button>
+                        <button class="editor-tab" data-tab="preview">Предпросмотр</button>
+                        <button class="editor-tab" data-tab="markdown">Markdown</button>
+                    </div>
+
+                    <!-- WYSIWYG редактор -->
+                    <div class="editor-area" id="wysiwyg-editor" style="display: block;"></div>
+
+                    <!-- Markdown редактор -->
+                    <textarea 
+                        class="editor-area" 
+                        id="markdown-editor" 
+                        style="display: none;"
+                        placeholder="Начните писать статью в формате Markdown..."
+                    ></textarea>
+
+                    <!-- Предпросмотр -->
+                    <div class="preview-area" id="preview-area" style="display: none;"></div>
+                </div>
+
+                <!-- Загрузка изображений -->
+                <div class="image-upload" id="image-upload">
+                    <p>📷 Перетащите изображение сюда или нажмите для выбора</p>
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                </div>
+
+                <!-- Действия -->
+                <div class="editor-actions">
+                    <div class="save-status" id="save-status">
+                        <span>Не сохранено</span>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary" id="cancel-btn">Отмена</button>
+                        <button class="btn btn-danger" id="delete-btn" style="display: none;">Удалить</button>
+                        <button class="btn btn-primary" id="save-btn">
+                            💾 Сохранить в GitHub
+                        </button>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Пустое состояние -->
+            <main class="editor-panel" id="empty-state" style="display: flex; align-items: center; justify-content: center;">
+                <div style="text-align: center; color: var(--text-secondary);">
+                    <h2 style="margin-bottom: 1rem; color: var(--text-primary);">Выберите статью для редактирования</h2>
+                    <p>или создайте новую статью</p>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="js/github-api.js"></script>
+    <script src="js/markdown-converter-browser.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
+

@@ -52,6 +52,14 @@ api/node_modules/
 .env.local
 *.local
 
+# GitHub токены и секреты (НИКОГДА не коммитьте!)
+*.token
+*.secret
+*_token.txt
+*_secret.txt
+github_token.txt
+github_secret.txt
+
 # Кэш браузера и временные файлы
 *.cache
 .cache/
@@ -61,6 +69,19 @@ dist/
 build/
 *.min.js.map
 *.min.css.map
+
+# Временные файлы редактора статей
+admin-drafts/
+*.draft.json
+localStorage-backup.json
+
+# Папка content/ - исходники статей (опционально, можно коммитить)
+# Раскомментируйте следующую строку, если не хотите коммитить markdown файлы:
+# blog/content/
+
+# Временные файлы браузера и длинные имена файлов
+blog/images/**/*_files/
+blog/images/**/*.html
 
 # Временные документы и планы (только в корне проекта)
 /*_PLAN.md

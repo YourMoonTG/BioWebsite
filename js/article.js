@@ -334,7 +334,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // Экспортируем для использования в других модулях
         window.ArticleManager = articleManager;
     }
+    
+    // Инициализируем сворачиваемые секции
+    initCollapsibleSections();
 });
+
+// Инициализация сворачиваемых секций
+function initCollapsibleSections() {
+    const collapsibles = document.querySelectorAll('.article-collapsible');
+    
+    collapsibles.forEach(collapsible => {
+        const header = collapsible.querySelector('.collapsible-header');
+        if (!header) return;
+        
+        // Добавляем обработчик клика
+        header.addEventListener('click', () => {
+            collapsible.classList.toggle('collapsed');
+        });
+        
+        // По умолчанию секции развернуты
+        collapsible.classList.remove('collapsed');
+    });
+}
 
 // Экспорт класса
 window.ArticleManager = ArticleManager;

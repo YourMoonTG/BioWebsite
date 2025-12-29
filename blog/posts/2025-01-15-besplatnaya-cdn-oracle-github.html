@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub - Moon</title>
+    
+    <!-- Метаданные статьи -->
+    <meta name="article-id" content="besplatnaya-cdn-oracle-github">
+    <meta name="article-date" content="2025-01-15">
+    <meta name="article-tags" content="cdn,oracle-cloud,github,сервер,devops,инфраструктура">
+    <meta name="article-read-time" content="18">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Подробное руководство по созданию бесплатной CDN-системы используя Oracle Cloud и GitHub. Настройка серверов, домена и стриминг файлов.">
+    <meta name="keywords" content="cdn, oracle cloud, github, бесплатный сервер, devops, инфраструктура">
+    <meta name="author" content="Moon">
+    <meta name="robots" content="index, follow">
+    <meta name="article:published_time" content="2025-01-15T00:00:00+03:00">
+    <meta name="article:author" content="Moon">
+    <meta name="article:section" content="Разработка">
+    <link rel="canonical" href="https://yourmoontg.github.io/blog/posts/2025-01-15-besplatnaya-cdn-oracle-github.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://yourmoontg.github.io/blog/posts/2025-01-15-besplatnaya-cdn-oracle-github.html">
+    <meta property="og:title" content="Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub - Moon">
+    <meta property="og:description" content="Подробное руководство по созданию бесплатной CDN-системы используя Oracle Cloud и GitHub">
+    <meta property="og:image" content="https://yourmoontg.github.io/assets/icons/icon-world.svg">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Moon Portfolio">
+    <meta property="article:published_time" content="2025-01-15T00:00:00+03:00">
+    <meta property="article:author" content="Moon">
+    <meta property="article:section" content="Разработка">
+    <meta property="article:tag" content="cdn">
+    <meta property="article:tag" content="oracle-cloud">
+    <meta property="article:tag" content="github">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://yourmoontg.github.io/blog/posts/2025-01-15-besplatnaya-cdn-oracle-github.html">
+    <meta name="twitter:title" content="Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub - Moon">
+    <meta name="twitter:description" content="Подробное руководство по созданию бесплатной CDN-системы используя Oracle Cloud и GitHub">
+    <meta name="twitter:image" content="https://yourmoontg.github.io/assets/icons/icon-world.svg">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub",
+      "description": "Подробное руководство по созданию бесплатной CDN-системы используя Oracle Cloud и GitHub. Настройка серверов, домена и стриминг файлов.",
+      "image": "https://yourmoontg.github.io/assets/icons/icon-world.svg",
+      "datePublished": "2025-01-15T00:00:00+03:00",
+      "dateModified": "2025-01-15T00:00:00+03:00",
+      "author": {
+        "@type": "Person",
+        "name": "Moon",
+        "url": "https://yourmoontg.github.io"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Moon",
+        "url": "https://yourmoontg.github.io"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://yourmoontg.github.io/blog/posts/2025-01-15-besplatnaya-cdn-oracle-github.html"
+      },
+      "keywords": ["cdn", "oracle-cloud", "github", "сервер", "devops", "инфраструктура"]
+    }
+    </script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/components.css">
+    <link rel="stylesheet" href="../../css/animations.css">
+    <link rel="stylesheet" href="../../css/blog.css">
+    
+    <!-- Шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="../../index.html" class="logo-link">
+                        <span class="logo-text">Moon</span>
+                    </a>
+                </div>
+                <nav class="nav">
+                    <a href="../../index.html#about" class="nav-link">О себе</a>
+                    <a href="../../index.html#portfolio" class="nav-link">Портфолио</a>
+                    <a href="../../blog.html" class="nav-link">Блог</a>
+                    <a href="../../index.html#contact" class="nav-link">Контакты</a>
+                </nav>
+                <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
+                    <img class="theme-icon icon-img icon-24" src="../../assets/icons/icon-moon.svg" alt="Тёмная тема">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero секция статьи -->
+    <section class="article-hero" style="padding-top: 6rem; padding-bottom: 3rem;">
+        <div class="container">
+            <div class="article-hero-content">
+                <!-- Хлебные крошки -->
+                <div class="article-breadcrumb">
+                    <a href="../../index.html">Главная</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="../../blog.html">Блог</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current">Статья</span>
+                </div>
+                
+                <!-- Метаданные статьи -->
+                <div class="article-meta-header">
+                    <span class="article-date-header" id="article-date">15 января 2025</span>
+                    <span class="article-read-time-header" id="article-read-time">18 мин чтения</span>
+                </div>
+                
+                <!-- Заголовок статьи -->
+                <h1 class="article-title-main" id="article-title">Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub</h1>
+                
+                <!-- Теги статьи -->
+                <div class="article-tags-header" id="article-tags">
+                    <span class="article-tag">cdn</span>
+                    <span class="article-tag">oracle-cloud</span>
+                    <span class="article-tag">github</span>
+                    <span class="article-tag">сервер</span>
+                    <span class="article-tag">devops</span>
+                    <span class="article-tag">инфраструктура</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контент статьи -->
+    <section class="article-content-section" style="padding: 2rem 0 6rem;">
+        <div class="container">
+            <article class="article-content-wrapper">
+                <div class="article-content" id="article-body">
+                    <p>
+                        CDN-система транслирует файлы из закрытых репозиториев GitHub через ваш сервер. GitHub ограничивает 
+                        репозиторий до 15 GB, но позволяет создавать неограниченное количество репозиториев.
+                    </p>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Характеристики сервера</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <p>До 2 бесплатных серверов в Oracle Cloud:</p>
+                                <ul>
+                                    <li>100 GB SSD</li>
+                                    <li>1 GB RAM</li>
+                                    <li>2 CPU</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Регистрация и создание VPS в Oracle Cloud</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <p>Регистрация: <a href="https://youtu.be/Hv6mTU-K61s?si=qq03v3Qbk44TOjTy" target="_blank" rel="noopener noreferrer">https://youtu.be/Hv6mTU-K61s?si=qq03v3Qbk44TOjTy</a></p>
+                                
+                                <h4>Создание инстанса</h4>
+                                <ol>
+                                    <li>Поиск → "Instance"</li>
+                                    <li>"Create instance"</li>
+                                    <li>Бесплатный тариф</li>
+                                    <li>SSD: 50 GB → 100 GB</li>
+                                    <li>OS: Oracle Linux → Ubuntu (мини-версия)</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/Фото 1.webp" alt="Поиск Instance в Oracle Cloud" loading="lazy">
+                                </figure>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/Фотой 2.webp" alt="Настройки создания инстанса - часть 1" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 3.webp" alt="Настройки создания инстанса - часть 2" loading="lazy">
+                                </figure>
+                                
+                                <blockquote>
+                                    <strong>Важно:</strong> Сохраните SSH-ключи. Запишите публичный IP адрес.
+                                </blockquote>
+
+                                <h4>Подключение по SSH</h4>
+                                <pre><code>ssh -i path/to/private_key.pem ubuntu@server_ip</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Установка aaPanel</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <h4>Подготовка системы</h4>
+                                <pre><code>sudo apt update -y
+sudo apt upgrade -y
+sudo apt install git wget -y</code></pre>
+                                
+                                <h4>Установка aaPanel</h4>
+                                <pre><code>wget --no-check-certificate -O install_7.0_en.sh https://www.aapanel.com/script/install_7.0_en.sh
+chmod +x install_7.0_en.sh
+./install_7.0_en.sh aapanel</code></pre>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 4.webp" alt="Результат установки aapanel" loading="lazy">
+                                </figure>
+
+                                <p>Сохраните URL панели, username и password.</p>
+                                
+                                <blockquote>
+                                    <strong>Важно:</strong> Если IP в URL скрыт, замените на публичный IP сервера. Нужно открыть порты: 30900, 888, 80, 443, 20-21
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Настройка портов</h2>
+
+                    <p>
+                        После этого нам нужно открыть порты внутри сервера и на сайте Oracle Cloud (открывайте те порты, 
+                        что написаны в консоли; я буду показывать на примере того, что выдало мне).
+                    </p>
+
+                    <h3>Открытие портов на сервере</h3>
+
+                    <p>Для начала давайте откроем порты внутри сервера:</p>
+
+                    <pre><code>sudo apt install ufw -y
+sudo ufw allow 30900
+sudo ufw allow 888
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 20
+sudo ufw allow 21</code></pre>
+
+                    <p>Прописываем: <code>sudo ufw status</code>. Если видим там все эти порты, значит, всё получилось, мы молодцы, и почти всё работает.</p>
+
+                    <h3>Открытие портов в Oracle Cloud</h3>
+
+                    <p>Переходим обратно в панель Oracle Cloud.</p>
+
+                    <p>
+                        В списке наших инстансов выбираете тот, который создавали. В разделе "Сведения об экземпляре" 
+                        ищите "Виртуальная облачная сеть". В моём случае она называется <code>vcn-20221009-1257</code>.
+                    </p>
+
+                    <p>
+                        Далее ищите пункт "Безопасность" и нажимаем на доступный нам список. В моём случае это 
+                        "Default Security List for vcn-20221009-1257".
+                    </p>
+
+                    <figure class="article-image">
+                        <img src="../../blog/images/фото 5.webp" alt="Security List в Oracle Cloud" loading="lazy">
+                    </figure>
+
+                    <p>
+                        После нажатия на "Default Security List for vcn-20221009-1257" (в вашем случае название может 
+                        отличаться), мы выбираем вкладку "Правила безопасности" и нажимаем на кнопку "Добавить правила 
+                        для входящего трафика".
+                    </p>
+
+                    <figure class="article-image">
+                        <img src="../../blog/images/ФОТО 6webp.webp" alt="Окно добавления правил безопасности" loading="lazy">
+                    </figure>
+
+                    <p>
+                        У нас появится окно добавления параметров, куда мы вводим данные, как показано у меня на скриншоте.
+                    </p>
+
+                    <figure class="article-image">
+                        <img src="../../blog/images/фото 7.webp" alt="Настройка правил безопасности - часть 1" loading="lazy">
+                    </figure>
+                    <figure class="article-image">
+                        <img src="../../blog/images/фото8.webp" alt="Настройка правил безопасности - часть 2" loading="lazy">
+                    </figure>
+                    <figure class="article-image">
+                        <img src="../../blog/images/фото 9.webp" alt="Настройка правил безопасности - часть 3" loading="lazy">
+                    </figure>
+
+                    <p>
+                        После всех этих действий нажимаете кнопку "Добавить правила входящего трафика", и мы почти 
+                        закончили с настройкой и установкой сервера.
+                    </p>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Настройка веб-панели</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <h4>Перезагрузка</h4>
+                                <pre><code>sudo reboot</code></pre>
+                                <p>Откройте URL панели и войдите.</p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 10.webp" alt="Авторизация в панели aapanel" loading="lazy">
+                                </figure>
+                                
+                                <h4>Установка ПО (LNMP)</h4>
+                                <ul>
+                                    <li>Nginx 1.24</li>
+                                    <li>MySQL MariaDB 10.11</li>
+                                    <li>PHP 8.3</li>
+                                    <li>Pure-Ftpd 1.0.49</li>
+                                    <li>phpMyAdmin 5.2</li>
+                                </ul>
+                                <p>"Quick install" → "One-click" (до 30 минут)</p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 11.webp" alt="Установка рекомендованного софта" loading="lazy">
+                                </figure>
+                                
+                                <h4>Python</h4>
+                                <ol>
+                                    <li>"App Store" → "Python Manager" → Install <strong>версия 2.0</strong></li>
+                                    <li>Settings → Version → Install Python 3.10.0</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 12.webp" alt="App Store в панели aapanel" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 13.webp" alt="Установка Python 2.0 в App Store" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 14.webp" alt="Выбор версии Python 3.10.0" loading="lazy">
+                                </figure>
+                                
+                                <h4>Создание папки</h4>
+                                <p>Files → New Folder → <code>testCDN</code></p>
+                                <p>Путь: <code>/www/wwwroot/testCDN</code></p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 15.webp" alt="Создание папки testCDN" loading="lazy">
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Развертывание CDN</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <h4>Загрузка скрипта</h4>
+                                <p>
+                                    <a href="https://github.com/illussioon/Fast-Server/tree/main" target="_blank" rel="noopener noreferrer">
+                                        https://github.com/illussioon/Fast-Server/tree/main
+                                    </a>
+                                </p>
+                                <p>Распакуйте и загрузите файлы в <code>/www/wwwroot/testCDN</code></p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 16.webp" alt="Скрипт Fast-Server на GitHub" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 17.webp" alt="Перенос файлов на сервер" loading="lazy">
+                                </figure>
+                                
+                                <h4>Python-проект</h4>
+                                <p>Python Manager → Create project:</p>
+                                <ul>
+                                    <li>Name: <code>tutorCDN</code></li>
+                                    <li>Path: <code>/www/wwwroot/testCDN/</code></li>
+                                    <li>Startup file: <code>/www/wwwroot/testCDN/server.py</code></li>
+                                    <li>Port: <code>8000</code></li>
+                                    <li>Run user: Root</li>
+                                    <li>Startup mode: python</li>
+                                </ul>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 18.webp" alt="Настройка проекта в Python Manager" loading="lazy">
+                                </figure>
+                                
+                                <h4>Python-модули</h4>
+                                <p>Project → Module → Add:</p>
+                                <ul>
+                                    <li><code>fastapi</code></li>
+                                    <li><code>uvicorn</code></li>
+                                    <li><code>edge-tts</code></li>
+                                    <li><code>requests</code></li>
+                                    <li><code>aiohttp</code></li>
+                                    <li><code>pymysql</code></li>
+                                </ul>
+                                <p>Version оставляем пустым.</p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 19.webp" alt="Установка модулей Python" loading="lazy">
+                                </figure>
+                                
+                                <h4>Плагин GitHub</h4>
+                                <ol>
+                                    <li>Files → <code>testCDN</code> → New Folder → <code>plugin</code></li>
+                                    <li>Скачать: <a href="https://cdn.illussion.graphics/git/lolz/tutor/GitHub.rar" target="_blank" rel="noopener noreferrer">GitHub.rar</a></li>
+                                    <li>Распаковать → загрузить папку <code>GitHub</code> в <code>plugin</code></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Настройка GitHub</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <h4>Personal Access Token</h4>
+                                <ol>
+                                    <li>GitHub → Avatar → Settings</li>
+                                    <li>Developer Settings → Personal access tokens → Tokens (classic)</li>
+                                    <li>Generate new token → Generate new token (classic)</li>
+                                    <li>Установите все права, срок действия — без ограничений</li>
+                                    <li>Generate token</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 20.webp" alt="Создание токена GitHub - часть 1" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 21.webp" alt="Создание токена GitHub - часть 2" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 22.webp" alt="Создание токена GitHub - часть 3" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 23.webp" alt="Создание токена GitHub - часть 4" loading="lazy">
+                                </figure>
+                                
+                                <blockquote>
+                                    <strong>Важно:</strong> Скопируйте токен сразу — он больше не будет показан.
+                                </blockquote>
+                                
+                                <h4>Создание репозитория</h4>
+                                <ol>
+                                    <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a> → "New"</li>
+                                    <li>Имя репозитория — любое, без пробелов</li>
+                                    <li><strong>ПРИВАТНЫЙ репозиторий</strong> (не публичный)</li>
+                                    <li>"Add README" → ON</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 24.webp" alt="Создание нового репозитория на GitHub" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 25.webp" alt="Настройка приватного репозитория" loading="lazy">
+                                </figure>
+                                
+                                <h4>Конфигурация</h4>
+                                <p>Откройте <code>plugin/GitHub/github_repo.json</code> и заполните:</p>
+                                <ul>
+                                    <li><code>token</code> — ваш GitHub Personal Access Token</li>
+                                    <li><code>username</code> — GitHub username</li>
+                                    <li><code>repository</code> — название репозитория</li>
+                                </ul>
+                                
+                                <h4>Логика работы</h4>
+                                <p>Структура: <code>username/repository</code></p>
+                                <p>Файл в корне Git → <code>youdomain.com/git/filename.zip</code></p>
+                                <p>В ссылке повторяется полная структура директорий Git.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="article-collapsible">
+                        <div class="collapsible-header">
+                            <h3>Настройка домена</h3>
+                            <span class="collapsible-icon"></span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="collapsible-content-inner">
+                                <h4>Добавление домена на сервер</h4>
+                                <p>Python Manager → Project → "Mapping" → <code>youdomain.com</code></p>
+                                
+                                <h4>Регистрация домена (nic.ua)</h4>
+                                <ol>
+                                    <li><a href="https://nic.ua/uk" target="_blank" rel="noopener noreferrer">nic.ua</a> → регистрация</li>
+                                    <li>Зона: <strong>pp.ua - free domain for people!</strong></li>
+                                    <li>Нужен загранпаспорт или карта (ByBit/другая)</li>
+                                    <li>Привязка карты через Google Pay (до 24 часов)</li>
+                                    <li>Верификация домена через Telegram-бота</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 26.webp" alt="Привязка карты через Google Pay на nic.ua" loading="lazy">
+                                </figure>
+                                
+                                <h4>Cloudflare</h4>
+                                <ol>
+                                    <li>Создать FREE аккаунт Cloudflare</li>
+                                    <li>Добавить домен → копировать NS-серверы</li>
+                                    <li>nic.ua → настройки → NS-серверы → "Изменить" → вставить NS от Cloudflare</li>
+                                </ol>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 27.webp" alt="Добавление домена в Cloudflare" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 28.webp" alt="Ввод домена в Cloudflare" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 29.webp" alt="NS-серверы Cloudflare" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 30.webp" alt="Изменение NS-серверов на nic.ua" loading="lazy">
+                                </figure>
+                                
+                                <h4>Кеширование</h4>
+                                <p>Cloudflare → Rules → Page Rules → добавить правило для <code>youdomain.com/cache/git/*</code></p>
+
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 31.webp" alt="Page Rules в Cloudflare" loading="lazy">
+                                </figure>
+                                <figure class="article-image">
+                                    <img src="../../blog/images/фото 32.webp" alt="Настройка правил кеширования в Cloudflare" loading="lazy">
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2>Готово</h2>
+                    
+                    <p>
+                        CDN-система настроена. Файлы транслируются из GitHub репозиториев через ваш сервер.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Навигация между статьями -->
+    <section class="article-navigation" style="padding: 2rem 0; background: var(--bg-secondary);">
+        <div class="container">
+            <div class="article-nav-wrapper">
+                <a href="#" class="article-nav-link article-nav-prev" id="article-prev" style="display: none;">
+                    <div class="article-nav-label">← Предыдущая статья</div>
+                    <div class="article-nav-title" id="article-prev-title"></div>
+                </a>
+                <a href="../../blog.html" class="article-nav-link article-nav-back">
+                    <div class="article-nav-label">← Назад к блогу</div>
+                </a>
+                <a href="#" class="article-nav-link article-nav-next" id="article-next" style="display: none;">
+                    <div class="article-nav-label">Следующая статья →</div>
+                    <div class="article-nav-title" id="article-next-title"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Связанные статьи -->
+    <section class="related-articles" style="padding: 4rem 0; background: var(--bg-primary);">
+        <div class="container">
+            <h2 class="section-title">Похожие статьи</h2>
+            <div id="related-articles-list" class="articles-grid">
+                <!-- Связанные статьи будут загружены через JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Контакты -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>Готов к новым проектам и интересным задачам!</p>
+                    <div class="contact-links">
+                        <a href="mailto:moon@example.com" class="contact-link">
+                            <img class="contact-icon icon-img" src="../../assets/icons/icon-mail.svg" alt="Почта">
+                            moon@example.com
+                        </a>
+                        <a href="https://github.com/YourMoonTG" class="contact-link">
+                            <img class="contact-icon icon-img" src="../../assets/icons/icon-github.svg" alt="GitHub">
+                            GitHub
+                        </a>
+                        <a href="https://t.me/m00n_ecosys" class="contact-link">
+                            <img class="contact-icon icon-img" src="../../assets/icons/icon-telegram.svg" alt="Telegram">
+                            Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../../js/main.js"></script>
+    <script src="../../js/article.js"></script>
+</body>
+</html>
+

@@ -20,8 +20,9 @@ bio-website-v2/
 │   └── icons/           # SVG иконки
 ├── blog/                # Блог
 │   ├── articles.json    # Метаданные статей
-│   ├── posts/           # HTML файлы статей
-│   ├── assets/          # Изображения для статей
+│   ├── content/         # Markdown файлы статей (исходники)
+│   ├── posts/           # HTML файлы статей (собираются автоматически)
+│   ├── images/          # Изображения для статей
 │   ├── post-template.html # Шаблон статьи
 │   └── README.md        # Документация блога
 ├── projects/            # Страницы проектов
@@ -38,10 +39,14 @@ bio-website-v2/
 │   ├── QUICKSTART.md    # Быстрый старт
 │   └── telegram-bot-example.* # Примеры интеграции
 ├── scripts/             # Утилиты
-│   ├── add-article.js   # Добавление статей
-│   └── validate-blog.js # Валидация блога
+│   ├── add-article.js   # Добавление статей (CLI)
+│   ├── build-article.js # Сборка статей из markdown
+│   ├── markdown-converter.js # Конвертер markdown → HTML
+│   └── validate-blog.js # Валидация структуры блога
+├── admin.html           # Веб-редактор статей
 ├── docs/                # Документация
 │   ├── plans/           # Планы разработки
+│   ├── ADMIN_EDITOR.md  # Инструкция по веб-редактору
 │   └── README.md        # Индекс документации
 ├── archive/             # Архив
 │   ├── css/             # Старые стили
@@ -100,3 +105,37 @@ bio-website-v2/
 - Vanilla JavaScript (ES6+)
 - IntersectionObserver / LocalStorage / DOM API
 - Three.js (планировалось для 3D‑куба, готово к подключению при необходимости)
+- TipTap (WYSIWYG редактор для статей)
+- GitHub API (для веб-редактора)
+
+## Веб-редактор статей
+
+Полноценный веб-редактор для написания статей прямо из браузера.
+
+**Особенности:**
+- WYSIWYG редактор с поддержкой Markdown
+- Автоматическое сохранение в GitHub
+- Загрузка изображений через drag & drop
+- Автоматическая сборка через GitHub Actions
+
+**Использование:**
+1. Откройте `admin.html` в браузере
+2. Введите GitHub Personal Access Token
+3. Начните писать статьи!
+
+Подробная инструкция: [docs/ADMIN_EDITOR.md](docs/ADMIN_EDITOR.md)
+
+## Рабочий процесс создания статей
+
+### Вариант 1: Веб-редактор (рекомендуется)
+1. Откройте `admin.html`
+2. Создайте или откройте статью
+3. Напишите контент в редакторе
+4. Сохраните в GitHub
+5. GitHub Actions автоматически соберёт HTML
+
+### Вариант 2: CLI утилиты
+1. `node scripts/add-article.js` - создать статью
+2. Отредактировать `blog/content/<id>.md`
+3. `node scripts/build-article.js <id>` - собрать HTML
+4. Коммит и пуш в GitHub

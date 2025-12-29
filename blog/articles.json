@@ -1,6 +1,17 @@
 {
   "articles": [
     {
+      "id": "besplatnaya-cdn-oracle-github",
+      "title": "Как поднять бесплатную CDN-систему с Oracle Cloud и GitHub",
+      "date": "2025-01-15",
+      "tags": ["cdn", "oracle-cloud", "github", "сервер", "devops", "инфраструктура"],
+      "excerpt": "Подробное руководство по созданию бесплатной CDN-системы используя Oracle Cloud и GitHub. Настройка серверов, домена и стриминг файлов через закрытые репозитории.",
+      "contentFile": "blog/posts/2025-01-15-besplatnaya-cdn-oracle-github.html",
+      "status": "published",
+      "readTime": 18,
+      "icon": "icon-world.svg"
+    },
+    {
       "id": "binary-exploitation",
       "title": "Эксплуатация бинарных уязвимостей",
       "date": "2025-05-27",

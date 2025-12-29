@@ -1,0 +1,51 @@
+name: CI and blog validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-blog:
+    name: Validate blog structure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run blog validator
+        run: node scripts/validate-blog.js
+
+  api-smoke-check:
+    name: API dependencies check
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./api
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install API dependencies
+        run: npm install --no-fund --no-audit
+
+      - name: Check server entrypoint exists
+        run: |
+          if [ ! -f "server.js" ]; then
+            echo "server.js not found" >&2
+            exit 1
+          fi

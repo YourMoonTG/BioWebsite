@@ -8,6 +8,7 @@
 
 - `index.html` - главная страница портфолио
 - `blog.html` - страница блога со списком статей
+- `admin.html` - веб-редактор статей
 - `README.md` - основная документация проекта
 - `start-site.cmd` - скрипт для быстрого запуска локального сервера
 - `.gitignore` - правила игнорирования файлов для Git
@@ -20,6 +21,7 @@
 - `components.css` - компоненты (кнопки, карточки, формы)
 - `animations.css` - анимации и переходы
 - `blog.css` - стили для блога (список статей и страницы статей)
+- `admin.css` - стили для веб-редактора статей
 
 ### `/js/` - JavaScript модули
 - `main.js` - основная логика (тема, скролл, тайпрайтер)
@@ -27,15 +29,19 @@
 - `cube.js` - 3D куб (Three.js)
 - `blog.js` - модуль для работы со списком статей
 - `article.js` - модуль для работы с отдельной статьей
+- `github-api.js` - клиент для работы с GitHub API (для веб-редактора)
+- `markdown-converter-browser.js` - конвертер markdown → HTML для браузера
+- `admin.js` - логика веб-редактора статей
 
 ### `/assets/` - Ресурсы
 - `icons/` - SVG иконки для сайта
 
 ### `/blog/` - Блог
-Гибридный подход: метаданные в JSON, контент в HTML файлах.
+Конструктор статей: метаданные в JSON, контент в markdown файлах, автоматическая сборка в HTML.
 - `articles.json` - метаданные всех статей
-- `posts/` - HTML файлы статей
-- `assets/` - изображения для статей
+- `content/` - markdown файлы статей (исходники)
+- `posts/` - HTML файлы статей (собираются автоматически)
+- `images/` - изображения для статей (организованы по папкам статей)
 - `post-template.html` - шаблон для создания новых статей
 - `README.md` - документация по работе с блогом
 
@@ -58,7 +64,9 @@ Express сервер для управления статьями через HTT
 
 ### `/scripts/` - Утилиты
 Node.js скрипты для работы с блогом:
-- `add-article.js` - интерактивное добавление статей
+- `add-article.js` - интерактивное добавление статей (CLI)
+- `build-article.js` - сборка статей из markdown в HTML
+- `markdown-converter.js` - конвертер markdown → HTML (Node.js версия)
 - `validate-blog.js` - валидация структуры блога
 
 ### `/docs/` - Документация
@@ -105,6 +113,12 @@ Node.js скрипты для работы с блогом:
 - JS: `../js/main.js`
 - Иконки: `../assets/icons/icon-name.svg`
 - JSON статей: `blog/articles.json` (для fetch из blog.html)
+
+### Из admin.html (веб-редактор)
+- CSS: `css/main.css`, `css/admin.css`
+- JS: `js/github-api.js`, `js/markdown-converter-browser.js`, `js/admin.js`
+- Иконки: `assets/icons/icon-name.svg`
+- Блог: `blog.html`
 
 ## Принципы организации
 

@@ -8,6 +8,7 @@ const readline = require('readline');
 const BLOG_DIR = path.join(__dirname, '..', 'blog');
 const ARTICLES_JSON = path.join(BLOG_DIR, 'articles.json');
 const POSTS_DIR = path.join(BLOG_DIR, 'posts');
+const CONTENT_DIR = path.join(BLOG_DIR, 'content');
 const TEMPLATE_FILE = path.join(BLOG_DIR, 'post-template.html');
 
 // Цвета для консоли
@@ -42,71 +43,57 @@ function askQuestion(rl, question) {
     });
 }
 
-// Создание HTML файла статьи из шаблона
-function createArticleFile(articleData) {
-    if (!fs.existsSync(TEMPLATE_FILE)) {
-        throw new Error(`Шаблон не найден: ${TEMPLATE_FILE}`);
+// Создание markdown файла статьи
+function createMarkdownFile(articleData) {
+    // Создаем директорию content, если её нет
+    if (!fs.existsSync(CONTENT_DIR)) {
+        fs.mkdirSync(CONTENT_DIR, { recursive: true });
     }
 
-    let template = fs.readFileSync(TEMPLATE_FILE, 'utf-8');
-
-    // Заменяем метаданные
-    template = template.replace(
-        /<meta name="article-id" content="[^"]*">/,
-        `<meta name="article-id" content="${articleData.id}">`
-    );
-    template = template.replace(
-        /<meta name="article-date" content="[^"]*">/,
-        `<meta name="article-date" content="${articleData.date}">`
-    );
-    template = template.replace(
-        /<meta name="article-tags" content="[^"]*">/,
-        `<meta name="article-tags" content="${articleData.tags.join(',')}">`
-    );
-    template = template.replace(
-        /<meta name="article-read-time" content="[^"]*">/,
-        `<meta name="article-read-time" content="${articleData.readTime}">`
-    );
-
-    // Заменяем заголовок
-    template = template.replace(
-        /<title>[^<]*<\/title>/,
-        `<title>${articleData.title} - Moon</title>`
-    );
-
-    // Заменяем заголовок статьи
-    template = template.replace(
-        /<h1 class="article-title-main"[^>]*>.*?<\/h1>/,
-        `<h1 class="article-title-main" id="article-title">${articleData.title}</h1>`
-    );
-
-    // Заменяем дату
-    const formattedDate = formatDate(articleData.date);
-    template = template.replace(
-        /<span class="article-date-header"[^>]*>.*?<\/span>/,
-        `<span class="article-date-header" id="article-date">${formattedDate}</span>`
-    );
-
-    // Заменяем время чтения
-    template = template.replace(
-        /<span class="article-read-time-header"[^>]*>.*?<\/span>/,
-        `<span class="article-read-time-header" id="article-read-time">${articleData.readTime} мин чтения</span>`
-    );
-
-    // Заменяем теги
-    const tagsHTML = articleData.tags.map(tag => 
-        `<span class="article-tag">${tag}</span>`
-    ).join('');
-    template = template.replace(
-        /<div class="article-tags-header"[^>]*>.*?<\/div>/,
-        `<div class="article-tags-header" id="article-tags">${tagsHTML}</div>`
-    );
-
-    // Сохраняем файл
-    const filePath = path.join(POSTS_DIR, articleData.contentFile);
-    fs.writeFileSync(filePath, template, 'utf-8');
+    const markdownFile = path.join(CONTENT_DIR, `${articleData.id}.md`);
     
-    return filePath;
+    // Создаем базовый markdown шаблон
+    const markdownTemplate = `# ${articleData.title}
+
+Начните писать вашу статью здесь.
+
+## Примеры использования
+
+### Обычный текст
+Просто пишите текст как обычно.
+
+### Изображения
+Используйте один из форматов:
+- \`![Описание](путь/к/изображению.webp)\` - стандартный markdown
+- \`[IMAGE:путь/к/изображению.webp]\` - простой формат
+- \`[IMAGE:путь/к/изображению.webp|Описание]\` - с описанием
+
+### Сворачиваемые секции
+\`\`\`
+>>> Заголовок секции
+Контент секции, который можно свернуть
+<<<
+\`\`\`
+
+### Код
+\`\`\`javascript
+function example() {
+    return "Hello, World!";
+}
+\`\`\`
+
+### Списки
+- Пункт 1
+- Пункт 2
+- Пункт 3
+
+### Цитаты
+> Важная информация или примечание
+`;
+
+    fs.writeFileSync(markdownFile, markdownTemplate, 'utf-8');
+    
+    return markdownFile;
 }
 
 // Форматирование даты
@@ -218,15 +205,10 @@ async function addArticle() {
             icon: icon
         };
 
-        // Создаем директорию posts, если её нет
-        if (!fs.existsSync(POSTS_DIR)) {
-            fs.mkdirSync(POSTS_DIR, { recursive: true });
-        }
-
-        // Создаем HTML файл
-        log('\n📄 Создание HTML файла статьи...', 'cyan');
-        const filePath = createArticleFile(articleData);
-        log(`✅ Файл создан: ${filePath}`, 'green');
+        // Создаем markdown файл
+        log('\n📄 Создание markdown файла статьи...', 'cyan');
+        const markdownFile = createMarkdownFile(articleData);
+        log(`✅ Markdown файл создан: ${markdownFile}`, 'green');
 
         // Добавляем в JSON
         log('\n📝 Добавление в articles.json...', 'cyan');
@@ -234,10 +216,14 @@ async function addArticle() {
         log('✅ Статья добавлена в articles.json', 'green');
 
         log('\n' + '='.repeat(50), 'cyan');
-        log('\n✅ Статья успешно добавлена!', 'green');
-        log(`\nФайл статьи: ${filePath}`, 'cyan');
-        log(`Статус: ${status}`, 'cyan');
-        log(`\nДля публикации измените статус на "published" в articles.json`, 'yellow');
+        log('\n✅ Статья успешно создана!', 'green');
+        log(`\n📝 Markdown файл: ${markdownFile}`, 'cyan');
+        log(`📊 Статус: ${status}`, 'cyan');
+        log(`\n📌 Следующие шаги:`, 'yellow');
+        log(`   1. Отредактируйте markdown файл: ${markdownFile}`, 'yellow');
+        log(`   2. Добавьте изображения в blog/images/${id}/`, 'yellow');
+        log(`   3. Соберите статью: node scripts/build-article.js ${id}`, 'yellow');
+        log(`   4. Для публикации измените статус на "published" в articles.json`, 'yellow');
 
     } catch (error) {
         log(`\n❌ Ошибка: ${error.message}`, 'red');
