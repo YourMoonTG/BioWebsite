@@ -1,101 +1,33 @@
-# Временные файлы и списки задач
-*.todo
-*.task
-TODO.md
-TASKS.md
-NOTES.md
+# Локальный редактор статей (не должен попадать в GitHub)
+# Эти файлы используются только локально
+admin.html
+js/admin.js
+js/github-api.js
+js/markdown-converter-browser.js
+css/admin.css
+docs/ADMIN_EDITOR.md
+
+# Временные файлы
+*.log
 *.tmp
-*.temp
-*-temp.*
-*-tmp.*
+.DS_Store
+Thumbs.db
+
+# Node modules (если есть)
+node_modules/
+npm-debug.log
+yarn-error.log
 
 # Бэкапы
 backups/
-*.backup
-*.bak
-*.old
-*-backup.*
-*-old.*
 
-# Логи и отладочные файлы
-*.log
-*.debug
-debug.*
-logs/
+# Локальные настройки
+.env
+.env.local
 
-# Системные файлы
-.DS_Store
-Thumbs.db
-desktop.ini
+# IDE
+.vscode/
+.idea/
 *.swp
 *.swo
 *~
-.vscode/
-.idea/
-*.sublime-*
-
-# Временные заметки и черновики
-drafts/
-notes-temp/
-scratch/
-*.draft
-*-draft.*
-
-# Node modules (если будут использоваться)
-node_modules/
-package-lock.json
-yarn.lock
-api/node_modules/
-
-# Среда разработки
-.env
-.env.local
-*.local
-
-# GitHub токены и секреты (НИКОГДА не коммитьте!)
-*.token
-*.secret
-*_token.txt
-*_secret.txt
-github_token.txt
-github_secret.txt
-
-# Кэш браузера и временные файлы
-*.cache
-.cache/
-
-# Временные файлы сборки (если будет использоваться)
-dist/
-build/
-*.min.js.map
-*.min.css.map
-
-# Временные файлы редактора статей
-admin-drafts/
-*.draft.json
-localStorage-backup.json
-
-# Папка content/ - исходники статей (опционально, можно коммитить)
-# Раскомментируйте следующую строку, если не хотите коммитить markdown файлы:
-# blog/content/
-
-# Временные файлы браузера и длинные имена файлов
-blog/images/**/*_files/
-blog/images/**/*.html
-
-# Временные документы и планы (только в корне проекта)
-/*_PLAN.md
-/*_IMPLEMENTATION*.md
-/*_PROGRESS.md
-/*_TODO.md
-/*_TASKS.md
-/*_NOTES.md
-/IMPLEMENTATION*.md
-/PLAN*.md
-/PROGRESS*.md
-# Документация в docs/ должна быть в репозитории
-!docs/
-!docs/**/*.md
-# Исключаем README.md из игнорирования
-!README.md
-

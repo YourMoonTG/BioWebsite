@@ -1,0 +1,61 @@
+name: Build Articles
+
+on:
+  push:
+    paths:
+      - 'blog/content/**'
+      - 'blog/articles.json'
+      - 'scripts/build-article.js'
+      - 'scripts/markdown-converter.js'
+      - 'blog/post-template.html'
+  workflow_dispatch: # Ручной запуск
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Нужно для коммита изменений
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # Нужно для работы с git
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'  # Кэширование npm пакетов
+      
+      - name: Install dependencies (if needed)
+        run: |
+          # Проверяем, есть ли package.json
+          if [ -f "package.json" ]; then
+            npm install
+          fi
+      
+      - name: Build all articles
+        run: |
+          node scripts/build-article.js --all
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          # Добавляем только измененные HTML файлы
+          git add blog/posts/
+          
+          # Коммитим только если есть изменения
+          if ! git diff --staged --quiet; then
+            git commit -m "Auto-build: Update generated HTML articles [skip ci]"
+            git push
+            echo "✅ Changes committed and pushed"
+          else
+            echo "ℹ️ No changes to commit"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
